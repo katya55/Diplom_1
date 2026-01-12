@@ -6,11 +6,17 @@ import org.junit.jupiter.params.provider.EnumSource;
 
 class IngredientTypeTest {
 
-        @ParameterizedTest
-        @EnumSource(IngredientType.class)
-        void enumValuesExist(IngredientType type) {
-            assertNotNull(type);
-            assertNotNull(type.name());
-        }
-  
+    @ParameterizedTest
+    @EnumSource(IngredientType.class)
+    void enumValueIsNotNull(IngredientType type) {
+        assertNotNull(type);
+    }
+
+    @ParameterizedTest
+    @EnumSource(IngredientType.class)
+    void enumNameIsNotNull(IngredientType type) {
+        assertNotNull(type.name());
+    }
+
+
 }

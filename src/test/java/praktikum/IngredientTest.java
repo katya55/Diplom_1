@@ -9,11 +9,23 @@ class IngredientTest {
 
     @ParameterizedTest
     @EnumSource(IngredientType.class)
-    void ingredientFieldsAreReturnedCorrectly(IngredientType type) {
+    void getTypeReturnsCorrectType(IngredientType type) {
         Ingredient ingredient = new Ingredient(type, "Test ingredient", 50.0f);
-
         assertEquals(type, ingredient.getType());
+    }
+
+    @ParameterizedTest
+    @EnumSource(IngredientType.class)
+    void getNameReturnsCorrectName(IngredientType type) {
+        Ingredient ingredient = new Ingredient(type, "Test ingredient", 50.0f);
         assertEquals("Test ingredient", ingredient.getName());
+    }
+
+    @ParameterizedTest
+    @EnumSource(IngredientType.class)
+    void getPriceReturnsCorrectPrice(IngredientType type) {
+        Ingredient ingredient = new Ingredient(type, "Test ingredient", 50.0f);
         assertEquals(50.0f, ingredient.getPrice());
     }
+
 }

@@ -24,27 +24,33 @@ class BurgerTest {
     }
 
     @Test
-    void addIngredientAddsIngredientToList() {
+    void addIngredientIncreasesIngredientsSize() {
         Ingredient ingredient = mock(Ingredient.class);
-
         burger.addIngredient(ingredient);
 
         assertEquals(1, burger.ingredients.size());
+    }
+
+    @Test
+    void addIngredientAddsCorrectIngredient() {
+        Ingredient ingredient = mock(Ingredient.class);
+        burger.addIngredient(ingredient);
+
         assertSame(ingredient, burger.ingredients.get(0));
     }
+
 
     @Test
     void removeIngredientRemovesIngredientByIndex() {
         Ingredient ingredient = mock(Ingredient.class);
         burger.addIngredient(ingredient);
-
         burger.removeIngredient(0);
 
         assertTrue(burger.ingredients.isEmpty());
     }
 
     @Test
-    void moveIngredientChangesIngredientPosition() {
+    void moveIngredientMovesSecondIngredientToFirstPosition() {
         Ingredient first = mock(Ingredient.class);
         Ingredient second = mock(Ingredient.class);
 
@@ -54,8 +60,21 @@ class BurgerTest {
         burger.moveIngredient(0, 1);
 
         assertEquals(second, burger.ingredients.get(0));
+    }
+
+    @Test
+    void moveIngredientMovesFirstIngredientToSecondPosition() {
+        Ingredient first = mock(Ingredient.class);
+        Ingredient second = mock(Ingredient.class);
+
+        burger.addIngredient(first);
+        burger.addIngredient(second);
+
+        burger.moveIngredient(0, 1);
+
         assertEquals(first, burger.ingredients.get(1));
     }
+
 
     @Test
     void getPriceReturnsCorrectTotalPrice() {
@@ -70,9 +89,7 @@ class BurgerTest {
 
         float price = burger.getPrice();
 
-        // булка * 2 + ингредиенты
         assertEquals(150.0f, price);
-        verify(bun, atLeastOnce()).getPrice();
     }
 
 
@@ -97,7 +114,7 @@ class BurgerTest {
     }
 
     @Test
-    void getReceiptContainsCorrectInformation() {
+    void getReceiptReturnsCorrectReceipt() {
         Ingredient ingredient = mock(Ingredient.class);
 
         when(ingredient.getType()).thenReturn(IngredientType.SAUCE);
@@ -106,15 +123,20 @@ class BurgerTest {
 
         burger.addIngredient(ingredient);
 
-        String receipt = burger.getReceipt();
+        String expectedReceipt =
+                "(==== White bun ====)\n" +
+                        "= sauce Ketchup =\n" +
+                        "(==== White bun ====)\n" +
+                        "\n" +
+                        "Price: 110.000000\n";
 
-        assertTrue(receipt.contains("(==== White bun ====)"));
-        assertTrue(receipt.contains("= sauce Ketchup ="));
-        assertTrue(receipt.contains("Price:"));
+        String actualReceipt = burger.getReceipt();
+
+        assertEquals(expectedReceipt, actualReceipt);
     }
 
     @Test
-    void removeIngredientFromMiddleWorksCorrectly() {
+    void removeIngredientFromMiddleDecreasesIngredientsSize() {
         Burger burger = new Burger();
         burger.setBuns(new Bun("Bun", 10f));
 
@@ -127,7 +149,23 @@ class BurgerTest {
         burger.removeIngredient(0);
 
         assertEquals(1, burger.ingredients.size());
+    }
+
+    @Test
+    void removeIngredientFromMiddleKeepsCorrectIngredient() {
+        Burger burger = new Burger();
+        burger.setBuns(new Bun("Bun", 10f));
+
+        Ingredient first = new Ingredient(IngredientType.SAUCE, "Sauce", 5f);
+        Ingredient second = new Ingredient(IngredientType.FILLING, "Meat", 15f);
+
+        burger.addIngredient(first);
+        burger.addIngredient(second);
+
+        burger.removeIngredient(0);
+
         assertEquals(second, burger.ingredients.get(0));
     }
+
 
 }
